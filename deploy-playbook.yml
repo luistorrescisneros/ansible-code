@@ -1,0 +1,28 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false 
+  tasks:
+  - name: clear the environment
+    file: 
+      name: Helloworldwebapp-dev.war
+      state: absent
+  
+  - name: downaload package from artifactory server
+    command: 'curl -uuser1:APB1GN2QYdb9h6wo35fEa3svjcY -O -L "https://plusforum.jfrog.io/artifactory/new-webapp/Helloworldwebapp-dev.war"'
+
+- hosts: appserver
+  remote_user: ubuntu
+  become: true
+  gather_facts: false
+  tasks: 
+  - name: rename package file
+    command: '/usr/bin/mv /opt/tomcat/webapps/Helloworldwebapp-dev.war /opt/tomcat/webapps/Helloworldwebapp-dev.war.bak'
+  - name: deploy war file to server
+    copy: 
+      src: './Helloworldwebapp-dev.war'
+      dest: '/opt/tomcat/webapps/Helloworldwebapp-dev.war'
+  - name: start app server
+    command: 'sh /opt/tomcat/bin/catalina.sh start' 
+    

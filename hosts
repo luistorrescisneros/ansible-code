@@ -17,11 +17,9 @@
 172.31.43.108
 
 [appserver]
-
 172.31.8.212
 
 [master:children]
-
 jenkins
 appserver
 
